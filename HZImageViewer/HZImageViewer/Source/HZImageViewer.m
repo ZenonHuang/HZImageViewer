@@ -18,6 +18,10 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
 @property (nonatomic,assign)  CGFloat                 panImageViewCenterX;
 @end
 
+@interface HZImageViewer ()
+@property (nonatomic,copy)  NSArray *cycleList;
+@end
+
 @implementation HZImageViewer
 
 #pragma mark - life cycle
@@ -43,6 +47,28 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
         self.pageControl.currentPage = self.pageIndex;
     }
     
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+   
+ 
+    if (self.isCycle) {
+        NSMutableArray *list = [NSMutableArray arrayWithArray:self.dataList];
+        
+        id  fristObj = [self.dataList.lastObject copy];
+        [list insertObject:fristObj atIndex:0];
+        
+        id  lastObj  = [self.dataList.firstObject copy];
+        [list addObject:lastObj];
+        
+        self.cycleList = list;
+        
+         self.pageIndex = self.pageIndex + 1;
+    }
+    
+    [self.listView reloadData];
 }
 
 - (void)viewWillLayoutSubviews{
@@ -151,16 +177,57 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
 }
 
 #pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+      [self resetCyclePosition];
+}
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+   
+    
     CGFloat contentOffSetX = scrollView.contentOffset.x;
     CGFloat scrollViewWidth = scrollView.frame.size.width;
     NSInteger newPageIndex = (int)round(contentOffSetX / scrollViewWidth);
     
-    if (self.pageIndex != newPageIndex ){
-        self.pageIndex = newPageIndex;
-        self.pageControl.currentPage = newPageIndex;
+    if (self.pageIndex == newPageIndex ){
+        return;
     }
     
+    
+    self.pageIndex = newPageIndex;
+    self.pageControl.currentPage = newPageIndex;
+    
+    [self resetCyclePosition];
+    
+}
+
+- (void)resetCyclePosition{
+    if (!self.isCycle) {
+        return;
+    }
+    
+    if (self.pageIndex == (self.cycleList.count-1)) {//最后一个，pagecontrol变换成 0
+        
+        //滑动到 row 1
+        [self.listView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]
+                              atScrollPosition:UICollectionViewScrollPositionNone
+                                      animated:NO];
+        self.pageControl.currentPage = 0;
+        return;
+    }
+    
+    if (self.pageIndex == 0 ) {//第一个，pagecontrol变换成最后一个
+        
+        //滑动到倒数第二
+        NSInteger row = self.cycleList.count-2;
+        [self.listView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]
+                              atScrollPosition:UICollectionViewScrollPositionNone
+                                      animated:NO];
+        
+        self.pageControl.currentPage =self.dataList.count-1;
+        return;
+    }
+    
+     self.pageControl.currentPage = self.pageIndex-1;
 }
 
 
@@ -177,19 +244,31 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
 }
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    if (self.isCycle) {
+          return self.cycleList.count;
+    }
     
     return self.dataList.count;
+  
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    
     HZImageViewerCell *cell = [self.listView dequeueReusableCellWithReuseIdentifier:HZImageViewerCellIdentifier
                                                                        forIndexPath:indexPath];
     [cell resetImageView];
-    [cell configureImage:self.dataList[indexPath.row]];
+   
+    
+    if (self.isCycle) {
+        [cell configureImage:self.cycleList[indexPath.row]];
+    }else{
+        [cell configureImage:self.dataList[indexPath.row]];
+    }
     
 //    cell.delegate = self;
     
     return cell;
+    
 }
 #pragma mark - UICollectionViewLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -200,6 +279,7 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
 - (void)singleTapImageView{
     //    [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 
 #pragma mark - getter
 - (UICollectionView *)listView{

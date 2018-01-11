@@ -73,6 +73,8 @@
 - (void)configureImage:(id)image{
     if ([image isKindOfClass:[UIImage class]]) {
         [self setImage:image];
+        
+        return;
     }
     
     if ([image isKindOfClass:[NSString class]]) {
@@ -89,9 +91,10 @@
 //                                     }
 //                                 }
 //         ];
-    
+        return;
     }
     
+    NSAssert(NO, @"非 UIImage 或 NSString 的数据");
 }
 
 #pragma mark - private
