@@ -177,12 +177,7 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
 }
 
 #pragma mark - UIScrollViewDelegate
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-      [self resetCyclePosition];
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-   
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
     CGFloat contentOffSetX = scrollView.contentOffset.x;
     CGFloat scrollViewWidth = scrollView.frame.size.width;
@@ -195,6 +190,13 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
     
     self.pageIndex = newPageIndex;
     self.pageControl.currentPage = newPageIndex;
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    [self resetCyclePosition];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     
     [self resetCyclePosition];
     
