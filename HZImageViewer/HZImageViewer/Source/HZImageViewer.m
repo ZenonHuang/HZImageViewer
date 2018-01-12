@@ -52,22 +52,6 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-   
- 
-    if (self.isCycle) {
-        NSMutableArray *list = [NSMutableArray arrayWithArray:self.dataList];
-        
-        id  fristObj = [self.dataList.lastObject copy];
-        [list insertObject:fristObj atIndex:0];
-        
-        id  lastObj  = [self.dataList.firstObject copy];
-        [list addObject:lastObj];
-        
-        self.cycleList = list;
-        
-         self.pageIndex = self.pageIndex + 1;
-    }
-    
     [self.listView reloadData];
 }
 
@@ -188,49 +172,23 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
     }
     
     
-    self.pageIndex = newPageIndex;
-    self.pageControl.currentPage = newPageIndex;
+    self.pageIndex = newPageIndex% (self.dataList.count);
+    self.pageControl.currentPage = newPageIndex% (self.dataList.count);
+    
+    
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    [self resetCyclePosition];
+
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     
-    [self resetCyclePosition];
+
     
 }
 
-- (void)resetCyclePosition{
-    if (!self.isCycle) {
-        return;
-    }
-    
-    if (self.pageIndex == (self.cycleList.count-1)) {//最后一个，pagecontrol变换成 0
-        
-        //滑动到 row 1
-        [self.listView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]
-                              atScrollPosition:UICollectionViewScrollPositionNone
-                                      animated:NO];
-        self.pageControl.currentPage = 0;
-        return;
-    }
-    
-    if (self.pageIndex == 0 ) {//第一个，pagecontrol变换成最后一个
-        
-        //滑动到倒数第二
-        NSInteger row = self.cycleList.count-2;
-        [self.listView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]
-                              atScrollPosition:UICollectionViewScrollPositionNone
-                                      animated:NO];
-        
-        self.pageControl.currentPage =self.dataList.count-1;
-        return;
-    }
-    
-     self.pageControl.currentPage = self.pageIndex-1;
-}
+
 
 
 #pragma mark - UICollectionViewDelegate
@@ -247,7 +205,7 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     if (self.isCycle) {
-          return self.cycleList.count;
+          return self.dataList.count * 100;
     }
     
     return self.dataList.count;
@@ -262,7 +220,10 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
    
     
     if (self.isCycle) {
-        [cell configureImage:self.cycleList[indexPath.row]];
+        
+        NSInteger i = indexPath.row % (self.dataList.count);
+         [cell configureImage:self.dataList[i]];
+
     }else{
         [cell configureImage:self.dataList[indexPath.row]];
     }
