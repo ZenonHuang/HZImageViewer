@@ -11,7 +11,7 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
 
 @property (nonatomic,strong)  HZImageViewerCell       *selectedCell;
 @property (nonatomic,strong)  UITapGestureRecognizer  *singleTapGesture;
-@property (nonatomic,assign)  NSInteger                pageIndex;
+
 
 @property (nonatomic,strong)  UIPageControl          *pageControl;
 @property (nonatomic,assign)  CGFloat                 originPanImageViewCenterX;
@@ -85,6 +85,9 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
     CGFloat  totalSpaceX = 20 * (CGFloat)self.pageIndex;
     CGPoint  newOffSet   = CGPointMake(newOffSetX+totalSpaceX, 0);
     [self.listView setContentOffset:newOffSet animated:NO];
+    
+    
+    self.pageControl.currentPage = self.pageIndex ;
 }
 
 - (void)handleTapGesture:(UITapGestureRecognizer *)sender {
@@ -174,7 +177,6 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
     
     self.pageIndex = newPageIndex% (self.dataList.count);
     self.pageControl.currentPage = newPageIndex% (self.dataList.count);
-    
     
 }
 

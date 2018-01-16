@@ -9,10 +9,18 @@
 #import "ViewController.h"
 #import "HZImageViewer.h"
 
+
+static NSString *const SampleCellIdentifier = @"SampleCellIdentifier";
+
 @interface ViewController ()
 @property (nonatomic,  copy) NSArray       *imageList;
 @property (nonatomic,strong) HZImageViewer *imageViewer;
 @property (nonatomic,assign) BOOL           isCycle;
+@end
+
+@interface ViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
+@property (nonatomic,strong) UICollectionView *collectionView;
+@property (nonatomic,strong) UICollectionViewFlowLayout *flowLayout;
 @end
 
 @implementation ViewController
@@ -34,6 +42,9 @@
     }
  
     self.imageList = mutList;
+    
+    [self.view addSubview:self.collectionView];
+    [self.collectionView reloadData];
 }
 
 - (void)setupRightItem{
@@ -76,6 +87,35 @@
     [self.navigationController pushViewController:self.imageViewer animated:YES];
 }
 
+#pragma mark - UICollectionViewDataSource
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+
+    return self.imageList.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SampleCellIdentifier
+                                                                       forIndexPath:indexPath];
+    
+    
+    cell.contentView.backgroundColor = [UIColor orangeColor];
+    
+    
+    return cell;
+    
+}
+
+#pragma mark - UICollectionViewDelegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    
+    self.imageViewer.pageIndex = indexPath.row;
+    [self presentViewController:self.imageViewer animated:YES completion:nil];
+    
+}
+
 #pragma mark - getter
 - (HZImageViewer *)imageViewer{
     if (!_imageViewer) {
@@ -91,4 +131,33 @@
     return _imageViewer;
 }
 
+- (UICollectionView *)collectionView{
+    if (!_collectionView ){
+          CGRect frame = [UIScreen mainScreen].bounds;
+        _collectionView = [[UICollectionView alloc] initWithFrame:frame 
+                                             collectionViewLayout:self.flowLayout];
+        _collectionView.delegate   = self;
+        _collectionView.dataSource = self;
+        
+        [_collectionView registerClass:[UICollectionViewCell class]
+            forCellWithReuseIdentifier:SampleCellIdentifier];
+        
+    }
+    return _collectionView;
+}
+
+-(UICollectionViewFlowLayout *)flowLayout{
+    if (!_flowLayout) {
+        _flowLayout = [[UICollectionViewFlowLayout alloc] init];
+        _flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
+        
+        _flowLayout.sectionInset    = UIEdgeInsetsMake(0,0,0,0);
+        _flowLayout.minimumLineSpacing      = 0;
+        _flowLayout.minimumInteritemSpacing = 0;
+        
+        CGSize size = [UIScreen mainScreen].bounds.size;
+        _flowLayout.itemSize = CGSizeMake(size.width/3, size.width/3);
+    }
+    return _flowLayout;
+}
 @end
