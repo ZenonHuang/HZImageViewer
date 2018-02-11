@@ -29,19 +29,9 @@ static NSString *const SampleCellIdentifier = @"SampleCellIdentifier";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
+    self.view.backgroundColor = [UIColor whiteColor];
     [self setupRightItem];
     
-    NSMutableArray *mutList = [[NSMutableArray alloc] init];
-    for (int i= 1; i<3; i++) {
-        NSString *name=[NSString stringWithFormat:@"test%d",i];
-        UIImage *testImage = [UIImage imageNamed:name];
-        if (testImage) {
-            [mutList addObject:testImage];
-        }
-    }
- 
-    self.imageList = mutList;
     
     [self.view addSubview:self.collectionView];
     [self.collectionView reloadData];
@@ -98,9 +88,12 @@ static NSString *const SampleCellIdentifier = @"SampleCellIdentifier";
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SampleCellIdentifier
                                                                        forIndexPath:indexPath];
     
+    UIImage *image         =   self.imageList[indexPath.row];
+    UIImageView *imageView =   [[UIImageView alloc] initWithImage:image];
+    imageView.contentMode  =   UIViewContentModeScaleAspectFit;
     
-    cell.contentView.backgroundColor = [UIColor orangeColor];
-    
+    imageView.frame = cell.bounds;
+    [cell.contentView addSubview:imageView];
     
     return cell;
     
@@ -159,5 +152,22 @@ static NSString *const SampleCellIdentifier = @"SampleCellIdentifier";
         _flowLayout.itemSize = CGSizeMake(size.width/3, size.width/3);
     }
     return _flowLayout;
+}
+
+- (NSArray *)imageList{
+    if (!_imageList) {
+  
+        NSMutableArray *mutList = [[NSMutableArray alloc] init];
+        for (int i= 1; i<3; i++) {
+            NSString *name=[NSString stringWithFormat:@"test%d",i];
+            UIImage *testImage = [UIImage imageNamed:name];
+            if (testImage) {
+                [mutList addObject:testImage];
+            }
+        }
+        
+        _imageList = [mutList copy];
+    }
+    return _imageList;
 }
 @end
