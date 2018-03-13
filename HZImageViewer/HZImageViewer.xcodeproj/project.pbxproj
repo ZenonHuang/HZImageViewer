@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		25B49A892057FBFE001AF21C /* HZSampleListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 25B49A882057FBFE001AF21C /* HZSampleListCell.m */; };
 		D68CCFCE1FFE3B5600865B1F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D68CCFCD1FFE3B5600865B1F /* AppDelegate.m */; };
 		D68CCFD11FFE3B5600865B1F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D68CCFD01FFE3B5600865B1F /* ViewController.m */; };
 		D68CCFD41FFE3B5600865B1F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D68CCFD21FFE3B5600865B1F /* Main.storyboard */; };
@@ -18,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		25B49A872057FBF2001AF21C /* HZSampleListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HZSampleListCell.h; sourceTree = "<group>"; };
+		25B49A882057FBFE001AF21C /* HZSampleListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HZSampleListCell.m; sourceTree = "<group>"; };
 		D68CCFC91FFE3B5500865B1F /* HZImageViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HZImageViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D68CCFCC1FFE3B5600865B1F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		D68CCFCD1FFE3B5600865B1F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -74,6 +77,8 @@
 				D68CCFD71FFE3B5600865B1F /* LaunchScreen.storyboard */,
 				D68CCFDA1FFE3B5600865B1F /* Info.plist */,
 				D68CCFDB1FFE3B5600865B1F /* main.m */,
+				25B49A872057FBF2001AF21C /* HZSampleListCell.h */,
+				25B49A882057FBFE001AF21C /* HZSampleListCell.m */,
 			);
 			path = HZImageViewer;
 			sourceTree = "<group>";
@@ -161,6 +166,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D68CCFE61FFE3B7E00865B1F /* HZImageViewer.m in Sources */,
+				25B49A892057FBFE001AF21C /* HZSampleListCell.m in Sources */,
 				D68CCFD11FFE3B5600865B1F /* ViewController.m in Sources */,
 				D68CCFDC1FFE3B5600865B1F /* main.m in Sources */,
 				D68CCFE71FFE3B7E00865B1F /* HZImageViewerCell.m in Sources */,
@@ -299,6 +305,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6Y2Y5S3FN4;
 				INFOPLIST_FILE = HZImageViewer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = zenonhuang.HZImageViewer;
@@ -312,6 +319,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6Y2Y5S3FN4;
 				INFOPLIST_FILE = HZImageViewer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = zenonhuang.HZImageViewer;

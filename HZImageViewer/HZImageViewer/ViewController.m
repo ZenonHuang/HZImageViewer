@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import "HZImageViewer.h"
-
+#import "HZSampleListCell.h"
 
 static NSString *const SampleCellIdentifier = @"SampleCellIdentifier";
 
@@ -32,9 +32,9 @@ static NSString *const SampleCellIdentifier = @"SampleCellIdentifier";
     self.view.backgroundColor = [UIColor whiteColor];
     [self setupRightItem];
     
-    
     [self.view addSubview:self.collectionView];
     [self.collectionView reloadData];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,10 +48,7 @@ static NSString *const SampleCellIdentifier = @"SampleCellIdentifier";
                                                              style:UIBarButtonItemStylePlain
                                                             target:self
                                                             action:@selector(tapRightItem:)];
-    
-    
     self.navigationItem.rightBarButtonItem = item;
-    
 }
 
 #pragma mark - action
@@ -75,25 +72,30 @@ static NSString *const SampleCellIdentifier = @"SampleCellIdentifier";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SampleCellIdentifier
+    HZSampleListCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SampleCellIdentifier
                                                                        forIndexPath:indexPath];
+    NSString *name         =   self.imageList[indexPath.row];
+    UIImage *testImage = [UIImage imageNamed:name];
     
-    UIImage *image         =   self.imageList[indexPath.row];
-    UIImageView *imageView =   [[UIImageView alloc] initWithImage:image];
-    imageView.contentMode  =   UIViewContentModeScaleAspectFit;
-    
-    imageView.frame = cell.bounds;
-    [cell.contentView addSubview:imageView];
+    [cell configureImage:testImage];
     
     return cell;
     
 }
 
 #pragma mark - UICollectionViewDelegate
-
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    
+    if (self.imageList) {
+        
+        NSMutableArray *mutList = [[NSMutableArray alloc] init];
+        for (NSString *name in self.imageList) {
+           UIImage *image =  [UIImage imageNamed:name];
+            [mutList addObject:image];
+        }
+        self.imageViewer.dataList = [mutList copy];
+    }
+    self.imageViewer.isCycle   = self.isCycle;
     self.imageViewer.pageIndex = indexPath.row;
     [self presentViewController:self.imageViewer animated:YES completion:nil];
     
@@ -101,17 +103,10 @@ static NSString *const SampleCellIdentifier = @"SampleCellIdentifier";
 
 #pragma mark - getter
 - (HZImageViewer *)imageViewer{
-    
     if (!_imageViewer) {
         _imageViewer = [[HZImageViewer alloc] init];
     }
     
-    _imageViewer.isCycle = self.isCycle;
-    
-    if (self.imageList) {
-        _imageViewer.dataList = self.imageList;
-    }
- 
     return _imageViewer;
 }
 
@@ -124,7 +119,10 @@ static NSString *const SampleCellIdentifier = @"SampleCellIdentifier";
         _collectionView.delegate   = self;
         _collectionView.dataSource = self;
         
-        [_collectionView registerClass:[UICollectionViewCell class]
+        _collectionView.bounces = YES;
+       _collectionView.alwaysBounceVertical = YES;
+        
+        [_collectionView registerClass:[HZSampleListCell class]
             forCellWithReuseIdentifier:SampleCellIdentifier];
         
     }
@@ -152,10 +150,8 @@ static NSString *const SampleCellIdentifier = @"SampleCellIdentifier";
         NSMutableArray *mutList = [[NSMutableArray alloc] init];
         for (int i= 1; i<3; i++) {
             NSString *name=[NSString stringWithFormat:@"test%d",i];
-            UIImage *testImage = [UIImage imageNamed:name];
-            if (testImage) {
-                [mutList addObject:testImage];
-            }
+            [mutList addObject:name];
+           
         }
         
         _imageList = [mutList copy];

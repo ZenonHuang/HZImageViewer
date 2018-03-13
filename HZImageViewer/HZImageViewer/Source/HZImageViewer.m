@@ -269,6 +269,8 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
             _listView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
         }
 #endif
+        
+        self.automaticallyAdjustsScrollViewInsets = NO;
     }
     return _listView;
 }
