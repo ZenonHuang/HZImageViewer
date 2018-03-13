@@ -4,6 +4,10 @@
 
 @protocol HZImageViewerCellDelegate <NSObject>
 
+- (void)singleTapImageView;
+
+@optional
+
 - (void)viewerScrollViewWillBeginZooming:(UIScrollView *)scrollView
                                 withView:(UIView *)view;
 

@@ -5,7 +5,7 @@
 
 static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifier";
 //HZImageViewerCellDelegate
-@interface HZImageViewer ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@interface HZImageViewer ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HZImageViewerCellDelegate>
 @property (nonatomic,strong)  UICollectionView           *listView;
 @property (nonatomic,strong)  UICollectionViewFlowLayout *flowLayout;
 
@@ -18,9 +18,9 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
 @property (nonatomic,assign)  CGFloat                 panImageViewCenterX;
 @end
 
-@interface HZImageViewer ()
-@property (nonatomic,copy)  NSArray *cycleList;
-@end
+//@interface HZImageViewer ()
+//@property (nonatomic,copy)  NSArray *cycleList;
+//@end
 
 @implementation HZImageViewer
 
@@ -47,12 +47,20 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
         self.pageControl.currentPage = self.pageIndex;
     }
     
+//    if (self.isCycle) {
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:(self.pageIndex+self.dataList.count*50) 
+//                                                     inSection:0];
+//        [self.listView scroll];
+//      [self.listView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:(self.pageIndex+self.dataList.count*50)  inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO]; 
+//    }
+
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
     [self.listView reloadData];
+
 }
 
 - (void)viewWillLayoutSubviews{
@@ -83,9 +91,15 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
     CGFloat  screenWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat  newOffSetX  = screenWidth*(CGFloat)self.pageIndex;
     CGFloat  totalSpaceX = 20 * (CGFloat)self.pageIndex;
-    CGPoint  newOffSet   = CGPointMake(newOffSetX+totalSpaceX, 0);
-    [self.listView setContentOffset:newOffSet animated:NO];
-    
+ 
+    if (self.isCycle) {
+        CGFloat  offset      = (newOffSetX+totalSpaceX)+(screenWidth+20)*self.dataList.count*50;
+        CGPoint  newOffSet   = CGPointMake(offset, 0);
+        [self.listView setContentOffset:newOffSet animated:NO];
+    }else{
+        CGPoint  newOffSet   = CGPointMake(newOffSetX+totalSpaceX, 0);
+        [self.listView setContentOffset:newOffSet animated:NO];
+    }
     
     self.pageControl.currentPage = self.pageIndex ;
 }
@@ -180,19 +194,6 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
     
 }
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    
-
-    
-}
-
-
-
-
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
     if (![cell isKindOfClass:[HZImageViewerCell class]]) {
@@ -222,15 +223,14 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
    
     
     if (self.isCycle) {
-        
-        NSInteger i = indexPath.row % (self.dataList.count);
+         NSInteger i = indexPath.row   % (self.dataList.count);
          [cell configureImage:self.dataList[i]];
 
     }else{
         [cell configureImage:self.dataList[indexPath.row]];
     }
     
-//    cell.delegate = self;
+    cell.delegate = self;
     
     return cell;
     
@@ -242,7 +242,7 @@ static NSString *const HZImageViewerCellIdentifier = @"HZImageViewerCellIdentifi
 
 #pragma mark - WFImageListViewerCellDelegate
 - (void)singleTapImageView{
-    //    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 

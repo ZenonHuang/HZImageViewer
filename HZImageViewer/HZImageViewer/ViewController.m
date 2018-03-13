@@ -37,25 +37,25 @@ static NSString *const SampleCellIdentifier = @"SampleCellIdentifier";
     [self.collectionView reloadData];
 }
 
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - private
 - (void)setupRightItem{
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"不循环"
                                                              style:UIBarButtonItemStylePlain
                                                             target:self
                                                             action:@selector(tapRightItem:)];
     
-
+    
     self.navigationItem.rightBarButtonItem = item;
     
 }
 
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - action
+
 - (void)tapRightItem:(UIBarButtonItem *)sender{
     
     self.isCycle = (!self.isCycle);
@@ -65,16 +65,6 @@ static NSString *const SampleCellIdentifier = @"SampleCellIdentifier";
         sender.title = @"不循环";
     }
 
-}
-
-- (IBAction)tapButton:(id)sender {
-    
-    [self presentViewController:self.imageViewer animated:YES completion:nil];
-}
-
-- (IBAction)tapPushButton:(id)sender {
-
-    [self.navigationController pushViewController:self.imageViewer animated:YES];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -111,6 +101,7 @@ static NSString *const SampleCellIdentifier = @"SampleCellIdentifier";
 
 #pragma mark - getter
 - (HZImageViewer *)imageViewer{
+    
     if (!_imageViewer) {
         _imageViewer = [[HZImageViewer alloc] init];
     }
@@ -126,9 +117,10 @@ static NSString *const SampleCellIdentifier = @"SampleCellIdentifier";
 
 - (UICollectionView *)collectionView{
     if (!_collectionView ){
-          CGRect frame = [UIScreen mainScreen].bounds;
+        CGRect frame = [UIScreen mainScreen].bounds;
         _collectionView = [[UICollectionView alloc] initWithFrame:frame 
                                              collectionViewLayout:self.flowLayout];
+        _collectionView.backgroundColor = [UIColor whiteColor]; 
         _collectionView.delegate   = self;
         _collectionView.dataSource = self;
         

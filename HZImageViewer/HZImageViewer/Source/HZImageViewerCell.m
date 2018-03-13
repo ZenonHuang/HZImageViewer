@@ -17,6 +17,10 @@
     self.backgroundColor = [UIColor clearColor];
     self.contentView.backgroundColor = [UIColor clearColor];
     
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleSingleTapGesture:)];
+            tap.numberOfTapsRequired  = 1;
+            [self.imageView addGestureRecognizer:tap];
+    
     self.doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                     action:@selector(handleDoubleTapGesture:)];
 
@@ -98,6 +102,12 @@
 }
 
 #pragma mark - private
+
+- (void)handleSingleTapGesture:(UITapGestureRecognizer *)sender{
+    if ([self.delegate respondsToSelector:@selector(singleTapImageView)]) {
+        [self.delegate singleTapImageView];
+    }
+}
 
 - (void)handleDoubleTapGesture:(UITapGestureRecognizer *)sender{
     if (self.scrollView.maximumZoomScale > self.scrollView.zoomScale ){
