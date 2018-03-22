@@ -17,9 +17,9 @@
     self.backgroundColor = [UIColor clearColor];
     self.contentView.backgroundColor = [UIColor clearColor];
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleSingleTapGesture:)];
-            tap.numberOfTapsRequired  = 1;
-            [self.imageView addGestureRecognizer:tap];
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleSingleTapGesture:)];
+//            tap.numberOfTapsRequired  = 1;
+//    [self.imageView addGestureRecognizer:tap];
     
     self.doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                     action:@selector(handleDoubleTapGesture:)];
