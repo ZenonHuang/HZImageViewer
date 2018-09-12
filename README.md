@@ -1,3 +1,15 @@
 # HZImageViewer
 
-图片浏览器，自适应图片大小，支持手势放大，循环浏览。类似微信样式。
+类似微信样式的图片浏览器。
+
+支持的功能:
+
+- 自适应图片大小
+- 循环浏览
+- 手势放大
+
+# 效果
+
+![gif](http://7xiym9.com1.z0.glb.clouddn.com/hzimageviewer.gif)
+
+
