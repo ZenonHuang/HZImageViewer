@@ -10,6 +10,5 @@
 
 # 效果
 
-![gif](http://7xiym9.com1.z0.glb.clouddn.com/hzimageviewer.gif)
-
+![gif](./gif/hzimageviewer.gif)
 
